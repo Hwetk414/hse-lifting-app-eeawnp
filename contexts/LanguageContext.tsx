@@ -122,6 +122,108 @@ const translations = {
     'hot.work': 'Hot Work Operations',
     'hot.work.desc': 'Hot work permits, fire watch, and welding safety standards',
     
+    // Risk Assessment Categories
+    'weather.conditions': 'Weather Conditions',
+    'load.characteristics': 'Load Characteristics',
+    'environmental.hazards': 'Environmental Hazards',
+    'personnel.factors': 'Personnel Factors',
+    'equipment.conditions': 'Equipment Conditions',
+    'operational.complexity': 'Operational Complexity',
+    
+    // Risk Factors - Weather
+    'high.winds': 'High winds (>20 mph / 32 km/h)',
+    'poor.visibility': 'Poor visibility (fog, dust, darkness)',
+    'extreme.temperature': 'Extreme temperature conditions',
+    'precipitation': 'Rain, snow, or ice conditions',
+    
+    // Risk Factors - Load
+    'load.over.75.percent': 'Load exceeds 75% of crane capacity',
+    'awkward.load': 'Awkward, unbalanced, or irregular shaped load',
+    'unknown.weight': 'Unknown or estimated load weight',
+    'fragile.load': 'Fragile or valuable load requiring precision',
+    
+    // Risk Factors - Environment
+    'overhead.powerlines': 'Overhead power lines within 10m',
+    'congested.area': 'Congested work area with limited space',
+    'underground.utilities': 'Underground utilities in work area',
+    'unstable.ground': 'Unstable or uneven ground conditions',
+    
+    // Risk Factors - Personnel
+    'inexperienced.operator': 'Inexperienced or uncertified operator',
+    'multiple.personnel': 'Multiple personnel in lift zone',
+    'communication.issues': 'Communication difficulties or language barriers',
+    'fatigue.stress': 'Operator fatigue or stress factors',
+    
+    // Risk Factors - Equipment
+    'complex.rigging': 'Complex rigging or multiple sling configuration',
+    'near.capacity.limits': 'Equipment operating near capacity limits',
+    'equipment.defects': 'Known equipment defects or maintenance issues',
+    'inadequate.maintenance': 'Inadequate maintenance records or overdue inspections',
+    
+    // Risk Factors - Operational
+    'blind.lift': 'Blind lift (operator cannot see load or landing area)',
+    'multi.crane.operation': 'Multi-crane or coordinated lifting operation',
+    'precision.placement': 'Precision placement or tight tolerance requirements',
+    'time.pressure': 'Time pressure or schedule constraints',
+    
+    // Risk Levels
+    'risk.low': 'LOW',
+    'risk.medium': 'MEDIUM',
+    'risk.high': 'HIGH',
+    'risk.critical': 'CRITICAL',
+    
+    // Risk Assessment UI
+    'select.applicable.risks': 'Select all applicable risk factors for your lifting operation',
+    'no.risk.factors': 'No Risk Factors Selected',
+    'select.risk.factors': 'Please select at least one risk factor to assess.',
+    'assess.risk': 'Assess Risk',
+    'reset': 'Reset',
+    'assessment.results': 'Risk Assessment Results',
+    'risk.score': 'Risk Score',
+    'weight': 'Weight',
+    'recommendations': 'Recommendations',
+    'critical.factors': 'Critical Risk Factors Identified',
+    'critical.factors.detected': 'Critical factors detected',
+    
+    // Risk Level Descriptions
+    'risk.level.low': 'LOW RISK',
+    'risk.level.medium': 'MEDIUM RISK',
+    'risk.level.high': 'HIGH RISK',
+    'risk.level.critical': 'CRITICAL RISK',
+    
+    // Recommendations - Critical
+    'stop.do.not.proceed': 'STOP - Do not proceed with lift operation',
+    'senior.management.approval': 'Senior management approval required before proceeding',
+    'comprehensive.risk.plan': 'Comprehensive risk mitigation plan must be developed',
+    'consider.postponing': 'Consider postponing until conditions improve',
+    'alternative.methods.required': 'Alternative lifting methods must be evaluated',
+    'safety.officer.consultation': 'Safety officer consultation mandatory',
+    'detailed.hazard.analysis': 'Detailed hazard analysis and job safety analysis required',
+    
+    // Recommendations - High
+    'detailed.lift.plan.review': 'Detailed lift plan review with all stakeholders required',
+    'senior.supervision.mandatory': 'Senior supervision and competent person oversight mandatory',
+    'consider.alternative.methods': 'Consider alternative lifting methods or equipment',
+    'additional.safety.equipment': 'Additional safety equipment and backup systems required',
+    'extended.briefing': 'Extended pre-lift safety briefing with all personnel',
+    'continuous.monitoring': 'Continuous monitoring of conditions throughout operation',
+    'emergency.procedures.ready': 'Emergency response procedures and equipment ready',
+    
+    // Recommendations - Medium
+    'enhanced.safety.briefing': 'Enhanced safety briefing with focus on identified risks',
+    'additional.supervision': 'Additional supervision and qualified spotter recommended',
+    'review.lift.plan': 'Review lift plan with all personnel involved',
+    'consider.additional.measures': 'Consider additional safety measures and controls',
+    'weather.monitoring': 'Continuous weather and environmental monitoring',
+    'communication.protocols': 'Establish clear communication protocols and signals',
+    
+    // Recommendations - Low
+    'standard.safety.procedures': 'Proceed with standard safety procedures and protocols',
+    'routine.briefing': 'Conduct routine pre-lift safety briefing',
+    'monitor.conditions': 'Monitor conditions throughout lift operation',
+    'follow.standard.protocols': 'Follow standard operating procedures and checklists',
+    'regular.equipment.checks': 'Perform regular equipment and rigging checks',
+    
     // Common UI
     'search.placeholder': 'Search standards, procedures, or organizations',
     'filter.by.organization': 'Filter by Organization',
@@ -209,6 +311,108 @@ const translations = {
     'environmental.compliance.desc': 'اللوائح البيئية ومتطلبات الامتثال',
     'hot.work': 'عمليات العمل الساخن',
     'hot.work.desc': 'تصاريح العمل الساخن ومراقبة الحرائق ومعايير سلامة اللحام',
+    
+    // Risk Assessment Categories
+    'weather.conditions': 'الظروف الجوية',
+    'load.characteristics': 'خصائص الحمولة',
+    'environmental.hazards': 'المخاطر البيئية',
+    'personnel.factors': 'عوامل الأفراد',
+    'equipment.conditions': 'حالة المعدات',
+    'operational.complexity': 'تعقيد العملية',
+    
+    // Risk Factors - Weather
+    'high.winds': 'رياح عالية (أكثر من 32 كم/ساعة)',
+    'poor.visibility': 'ضعف الرؤية (ضباب، غبار، ظلام)',
+    'extreme.temperature': 'ظروف درجات حرارة قصوى',
+    'precipitation': 'ظروف المطر أو الثلج أو الجليد',
+    
+    // Risk Factors - Load
+    'load.over.75.percent': 'الحمولة تتجاوز 75% من سعة الرافعة',
+    'awkward.load': 'حمولة غير متوازنة أو غير منتظمة الشكل',
+    'unknown.weight': 'وزن الحمولة غير معروف أو مقدر',
+    'fragile.load': 'حمولة هشة أو قيمة تتطلب دقة',
+    
+    // Risk Factors - Environment
+    'overhead.powerlines': 'خطوط الكهرباء العلوية ضمن 10 متر',
+    'congested.area': 'منطقة عمل مزدحمة بمساحة محدودة',
+    'underground.utilities': 'مرافق تحت الأرض في منطقة العمل',
+    'unstable.ground': 'ظروف أرضية غير مستقرة أو غير مستوية',
+    
+    // Risk Factors - Personnel
+    'inexperienced.operator': 'مشغل غير مؤهل أو غير معتمد',
+    'multiple.personnel': 'عدة أفراد في منطقة الرفع',
+    'communication.issues': 'صعوبات في التواصل أو حواجز لغوية',
+    'fatigue.stress': 'إرهاق المشغل أو عوامل الضغط',
+    
+    // Risk Factors - Equipment
+    'complex.rigging': 'تجهيز معقد أو تكوين حبال متعددة',
+    'near.capacity.limits': 'المعدات تعمل قريباً من حدود السعة',
+    'equipment.defects': 'عيوب معروفة في المعدات أو مشاكل صيانة',
+    'inadequate.maintenance': 'سجلات صيانة غير كافية أو فحوصات متأخرة',
+    
+    // Risk Factors - Operational
+    'blind.lift': 'رفع أعمى (المشغل لا يرى الحمولة أو منطقة الهبوط)',
+    'multi.crane.operation': 'عملية رافعات متعددة أو رفع منسق',
+    'precision.placement': 'وضع دقيق أو متطلبات تفاوت ضيق',
+    'time.pressure': 'ضغط الوقت أو قيود الجدولة',
+    
+    // Risk Levels
+    'risk.low': 'منخفض',
+    'risk.medium': 'متوسط',
+    'risk.high': 'عالي',
+    'risk.critical': 'حرج',
+    
+    // Risk Assessment UI
+    'select.applicable.risks': 'اختر جميع عوامل المخاطر المطبقة على عملية الرفع الخاصة بك',
+    'no.risk.factors': 'لم يتم اختيار عوامل مخاطر',
+    'select.risk.factors': 'يرجى اختيار عامل مخاطر واحد على الأقل للتقييم.',
+    'assess.risk': 'تقييم المخاطر',
+    'reset': 'إعادة تعيين',
+    'assessment.results': 'نتائج تقييم المخاطر',
+    'risk.score': 'نقاط المخاطر',
+    'weight': 'الوزن',
+    'recommendations': 'التوصيات',
+    'critical.factors': 'عوامل المخاطر الحرجة المحددة',
+    'critical.factors.detected': 'تم اكتشاف عوامل حرجة',
+    
+    // Risk Level Descriptions
+    'risk.level.low': 'مخاطر منخفضة',
+    'risk.level.medium': 'مخاطر متوسطة',
+    'risk.level.high': 'مخاطر عالية',
+    'risk.level.critical': 'مخاطر حرجة',
+    
+    // Recommendations - Critical
+    'stop.do.not.proceed': 'توقف - لا تتابع عملية الرفع',
+    'senior.management.approval': 'موافقة الإدارة العليا مطلوبة قبل المتابعة',
+    'comprehensive.risk.plan': 'يجب وضع خطة شاملة للتخفيف من المخاطر',
+    'consider.postponing': 'فكر في التأجيل حتى تتحسن الظروف',
+    'alternative.methods.required': 'يجب تقييم طرق الرفع البديلة',
+    'safety.officer.consultation': 'استشارة مسؤول السلامة إلزامية',
+    'detailed.hazard.analysis': 'تحليل مفصل للمخاطر وتحليل سلامة العمل مطلوب',
+    
+    // Recommendations - High
+    'detailed.lift.plan.review': 'مراجعة مفصلة لخطة الرفع مع جميع أصحاب المصلحة مطلوبة',
+    'senior.supervision.mandatory': 'الإشراف العليا ومراقبة الشخص المختص إلزامية',
+    'consider.alternative.methods': 'فكر في طرق الرفع البديلة أو المعدات',
+    'additional.safety.equipment': 'معدات السلامة الإضافية وأنظمة النسخ الاحتياطي مطلوبة',
+    'extended.briefing': 'إحاطة سلامة مطولة قبل الرفع مع جميع الأفراد',
+    'continuous.monitoring': 'مراقبة مستمرة للظروف طوال العملية',
+    'emergency.procedures.ready': 'إجراءات ومعدات الاستجابة للطوارئ جاهزة',
+    
+    // Recommendations - Medium
+    'enhanced.safety.briefing': 'إحاطة سلامة محسنة مع التركيز على المخاطر المحددة',
+    'additional.supervision': 'إشراف إضافي ومراقب مؤهل موصى به',
+    'review.lift.plan': 'مراجعة خطة الرفع مع جميع الأفراد المشاركين',
+    'consider.additional.measures': 'فكر في تدابير وضوابط السلامة الإضافية',
+    'weather.monitoring': 'مراقبة مستمرة للطقس والبيئة',
+    'communication.protocols': 'وضع بروتوكولات وإشارات تواصل واضحة',
+    
+    // Recommendations - Low
+    'standard.safety.procedures': 'تابع بإجراءات وبروتوكولات السلامة المعيارية',
+    'routine.briefing': 'قم بإحاطة سلامة روتينية قبل الرفع',
+    'monitor.conditions': 'راقب الظروف طوال عملية الرفع',
+    'follow.standard.protocols': 'اتبع إجراءات التشغيل المعيارية وقوائم المراجعة',
+    'regular.equipment.checks': 'قم بفحوصات منتظمة للمعدات والتجهيز',
     
     // Common UI
     'search.placeholder': 'البحث في المعايير والإجراءات والمنظمات',
