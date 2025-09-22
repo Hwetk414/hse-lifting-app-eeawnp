@@ -1,3 +1,5 @@
+
+import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { colors } from '../styles/commonStyles';
 
@@ -6,32 +8,75 @@ interface ButtonProps {
   onPress: () => void;
   style?: ViewStyle | ViewStyle[];
   textStyle?: TextStyle;
-}
-
-export default function Button({ text, onPress, style, textStyle }: ButtonProps) {
-  return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress} activeOpacity={0.7}>
-      <Text style={[styles.buttonText, textStyle]}>{text}</Text>
-    </TouchableOpacity>
-  );
+  variant?: 'primary' | 'secondary' | 'outline';
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.primary,
-    padding: 14,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
     borderRadius: 8,
-    marginTop: 10,
-    width: '100%',
-    boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.25)',
-    elevation: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
-    color: '#fff',
+  primary: {
+    backgroundColor: colors.primary,
+  },
+  secondary: {
+    backgroundColor: colors.secondary,
+  },
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  text: {
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: '600',
+  },
+  primaryText: {
+    color: 'white',
+  },
+  secondaryText: {
+    color: 'white',
+  },
+  outlineText: {
+    color: colors.primary,
   },
 });
+
+export default function Button({ text, onPress, style, textStyle, variant = 'primary' }: ButtonProps) {
+  const getButtonStyle = () => {
+    switch (variant) {
+      case 'secondary':
+        return [styles.button, styles.secondary];
+      case 'outline':
+        return [styles.button, styles.outline];
+      default:
+        return [styles.button, styles.primary];
+    }
+  };
+
+  const getTextStyle = () => {
+    switch (variant) {
+      case 'secondary':
+        return [styles.text, styles.secondaryText];
+      case 'outline':
+        return [styles.text, styles.outlineText];
+      default:
+        return [styles.text, styles.primaryText];
+    }
+  };
+
+  return (
+    <TouchableOpacity
+      style={[getButtonStyle(), style]}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      <Text style={[getTextStyle(), textStyle]}>
+        {text}
+      </Text>
+    </TouchableOpacity>
+  );
+}
