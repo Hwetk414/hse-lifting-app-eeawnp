@@ -25,9 +25,16 @@ export default function HomeScreen() {
       color: colors.secondary,
     },
     {
+      title: 'Critical Lifting Plan',
+      description: 'Critical lift planning, risk assessment, and procedures',
+      icon: 'warning-outline',
+      route: '/critical-lifting-plan',
+      color: '#E91E63',
+    },
+    {
       title: 'Risk Assessment',
       description: 'Evaluate lifting operation risks',
-      icon: 'warning-outline',
+      icon: 'shield-outline',
       route: '/risk-assessment',
       color: colors.warning,
     },
@@ -68,6 +75,13 @@ export default function HomeScreen() {
       icon: 'person-outline',
       route: '/fall-protection',
       color: '#2196F3',
+    },
+    {
+      title: 'Ladder Safety',
+      description: 'Ladder selection, inspection, setup, and safe use practices',
+      icon: 'trending-up-outline',
+      route: '/ladder-safety',
+      color: '#00BCD4',
     },
     {
       title: 'Lifeline Safety',
