@@ -1,10 +1,11 @@
 
+import React, { useState } from 'react';
+import { Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { commonStyles, colors } from '../styles/commonStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import Icon from '../components/Icon';
-import { commonStyles, colors } from '../styles/commonStyles';
 import SimpleBottomSheet from '../components/BottomSheet';
 
 interface LadderSafetyResource {
@@ -17,10 +18,12 @@ interface LadderSafetyResource {
 }
 
 export default function LadderSafetyScreen() {
+  const router = useRouter();
+  const { t, isRTL } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedResource, setSelectedResource] = useState<LadderSafetyResource | null>(null);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const ladderSafetyResources: LadderSafetyResource[] = [
     {
@@ -244,15 +247,22 @@ export default function LadderSafetyScreen() {
     }
   ];
 
-  const filteredResources = ladderSafetyResources.filter(resource =>
-    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const categories = [t('all'), 'OSHA', 'ANSI', 'Saudi Aramco', 'NIOSH', t('all')];
+
+  const filteredResources = ladderSafetyResources.filter(resource => {
+    const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.category.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory === t('all') || resource.category === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
 
   const openResource = (resource: LadderSafetyResource) => {
     setSelectedResource(resource);
     setIsBottomSheetVisible(true);
+    console.log('Opening ladder safety resource:', resource.title);
   };
 
   const getCategoryColor = (category: string) => {
@@ -266,35 +276,161 @@ export default function LadderSafetyScreen() {
   };
 
   return (
-    <SafeAreaView style={commonStyles.container}>
-      <View style={commonStyles.header}>
+    <SafeAreaView style={[commonStyles.container, isRTL && { direction: 'rtl' }]}>
+      <View style={[
+        commonStyles.row, 
+        { 
+          paddingHorizontal: 20, 
+          paddingVertical: 16, 
+          borderBottomWidth: 1, 
+          borderBottomColor: colors.border,
+          flexDirection: isRTL ? 'row-reverse' : 'row'
+        }
+      ]}>
         <TouchableOpacity 
           onPress={() => router.back()} 
-          style={commonStyles.backButton}
+          style={{ 
+            marginRight: isRTL ? 0 : 16,
+            marginLeft: isRTL ? 16 : 0
+          }}
         >
-          <Icon name="arrow-back-outline" size={24} color={colors.text} />
+          <Icon 
+            name={isRTL ? "arrow-forward-outline" : "arrow-back-outline"} 
+            size={24} 
+            color={colors.text} 
+          />
         </TouchableOpacity>
-        <Text style={commonStyles.headerTitle}>Ladder Safety</Text>
+        <Text style={[
+          commonStyles.subtitle, 
+          { 
+            marginBottom: 0, 
+            flex: 1,
+            textAlign: isRTL ? 'right' : 'left'
+          }
+        ]}>
+          {t('ladder.safety')}
+        </Text>
       </View>
 
-      <View style={commonStyles.content}>
-        <View style={commonStyles.searchContainer}>
-          <Icon name="search-outline" size={20} color={colors.textLight} />
-          <TextInput
-            style={commonStyles.searchInput}
-            placeholder="Search ladder safety resources..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            placeholderTextColor={colors.textLight}
-          />
+      <ScrollView style={commonStyles.content} showsVerticalScrollIndicator={false}>
+        <Text style={[
+          commonStyles.textLight, 
+          { 
+            marginBottom: 16, 
+            fontSize: 16,
+            textAlign: isRTL ? 'right' : 'left'
+          }
+        ]}>
+          Ladder safety standards and best practices for safe use
+        </Text>
+
+        <View style={commonStyles.section}>
+          <Text style={[
+            commonStyles.label,
+            { textAlign: isRTL ? 'right' : 'left' }
+          ]}>
+            {t('search.resources')}
+          </Text>
+          <View style={{ position: 'relative' }}>
+            <TextInput
+              style={[
+                commonStyles.input, 
+                { 
+                  paddingLeft: isRTL ? 12 : 40,
+                  paddingRight: isRTL ? 40 : 12,
+                  textAlign: isRTL ? 'right' : 'left'
+                }
+              ]}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholder={t('search.placeholder')}
+              placeholderTextColor={colors.textLight}
+            />
+            <Icon 
+              name="search-outline" 
+              size={20} 
+              color={colors.textLight} 
+              style={{ 
+                position: 'absolute', 
+                left: isRTL ? undefined : 12, 
+                right: isRTL ? 12 : undefined,
+                top: 12 
+              }}
+            />
+          </View>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={commonStyles.section}>
+          <Text style={[
+            commonStyles.label, 
+            { 
+              marginBottom: 12,
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          ]}>
+            {t('filter.by.organization')}
+          </Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            style={{ marginBottom: 16 }}
+            contentContainerStyle={{ 
+              paddingHorizontal: isRTL ? 0 : 0,
+              flexDirection: isRTL ? 'row-reverse' : 'row'
+            }}
+          >
+            {categories.map((category) => (
+              <TouchableOpacity
+                key={category}
+                style={[
+                  {
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: 20,
+                    marginRight: isRTL ? 0 : 8,
+                    marginLeft: isRTL ? 8 : 0,
+                    borderWidth: 1,
+                  },
+                  selectedCategory === category
+                    ? { backgroundColor: colors.primary, borderColor: colors.primary }
+                    : { backgroundColor: 'transparent', borderColor: colors.border }
+                ]}
+                onPress={() => setSelectedCategory(category)}
+              >
+                <Text
+                  style={[
+                    { fontSize: 14, fontWeight: '500' },
+                    selectedCategory === category
+                      ? { color: 'white' }
+                      : { color: colors.text }
+                  ]}
+                >
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        <View style={commonStyles.section}>
+          <Text style={[
+            commonStyles.subtitle, 
+            { 
+              marginBottom: 16,
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          ]}>
+            {t('available.resources')} ({filteredResources.length})
+          </Text>
+
           {filteredResources.length === 0 ? (
-            <View style={commonStyles.emptyState}>
-              <Icon name="search-outline" size={48} color={colors.textLight} />
-              <Text style={commonStyles.emptyStateText}>
-                No resources found matching "{searchQuery}"
+            <View style={[commonStyles.card, commonStyles.center, { padding: 40 }]}>
+              <Icon name="search-outline" size={48} color={colors.textLight} style={{ marginBottom: 16 }} />
+              <Text style={[
+                commonStyles.text, 
+                { textAlign: 'center' }
+              ]}>
+                {t('no.results')}
               </Text>
             </View>
           ) : (
@@ -303,68 +439,206 @@ export default function LadderSafetyScreen() {
                 key={index}
                 style={[
                   commonStyles.card,
-                  { borderLeftWidth: 4, borderLeftColor: getCategoryColor(resource.category) }
+                  { 
+                    borderLeftWidth: isRTL ? 0 : 4, 
+                    borderRightWidth: isRTL ? 4 : 0,
+                    borderLeftColor: isRTL ? 'transparent' : getCategoryColor(resource.category),
+                    borderRightColor: isRTL ? getCategoryColor(resource.category) : 'transparent'
+                  }
                 ]}
                 onPress={() => openResource(resource)}
                 activeOpacity={0.7}
               >
-                <View style={commonStyles.row}>
+                <View style={[
+                  commonStyles.row,
+                  { flexDirection: isRTL ? 'row-reverse' : 'row' }
+                ]}>
                   <View style={{ flex: 1 }}>
-                    <View style={[commonStyles.row, { marginBottom: 8 }]}>
+                    <View style={[
+                      commonStyles.row, 
+                      { 
+                        marginBottom: 8,
+                        flexDirection: isRTL ? 'row-reverse' : 'row'
+                      }
+                    ]}>
                       <Icon 
                         name={resource.icon as any} 
                         size={24} 
                         color={getCategoryColor(resource.category)} 
-                        style={{ marginRight: 12 }}
+                        style={{ 
+                          marginRight: isRTL ? 0 : 12,
+                          marginLeft: isRTL ? 12 : 0
+                        }}
                       />
                       <View style={{ flex: 1 }}>
-                        <Text style={[commonStyles.subtitle, { marginBottom: 4, fontSize: 16 }]}>
+                        <Text style={[
+                          commonStyles.subtitle, 
+                          { 
+                            marginBottom: 4, 
+                            fontSize: 16,
+                            textAlign: isRTL ? 'right' : 'left'
+                          }
+                        ]}>
                           {resource.title}
                         </Text>
-                        <View style={[commonStyles.badge, { backgroundColor: getCategoryColor(resource.category) + '20' }]}>
-                          <Text style={[commonStyles.badgeText, { color: getCategoryColor(resource.category) }]}>
+                        <View style={[
+                          {
+                            backgroundColor: getCategoryColor(resource.category) + '20',
+                            paddingHorizontal: 8,
+                            paddingVertical: 2,
+                            borderRadius: 10,
+                            alignSelf: isRTL ? 'flex-end' : 'flex-start'
+                          }
+                        ]}>
+                          <Text style={[
+                            { 
+                              color: getCategoryColor(resource.category),
+                              fontSize: 10,
+                              fontWeight: '600'
+                            }
+                          ]}>
                             {resource.category}
                           </Text>
                         </View>
                       </View>
                     </View>
-                    <Text style={[commonStyles.textLight, { marginLeft: 36 }]}>
+                    <Text style={[
+                      commonStyles.textLight, 
+                      { 
+                        marginLeft: isRTL ? 0 : 36,
+                        marginRight: isRTL ? 36 : 0,
+                        textAlign: isRTL ? 'right' : 'left'
+                      }
+                    ]}>
                       {resource.description}
                     </Text>
                   </View>
-                  <Icon name="chevron-forward-outline" size={20} color={colors.textLight} />
+                  <Icon 
+                    name={isRTL ? "chevron-back-outline" : "chevron-forward-outline"} 
+                    size={20} 
+                    color={colors.textLight} 
+                  />
                 </View>
               </TouchableOpacity>
             ))
           )}
-        </ScrollView>
-      </View>
+        </View>
+
+        <View style={[
+          commonStyles.card, 
+          { 
+            backgroundColor: colors.primary, 
+            marginTop: 20, 
+            marginBottom: 20 
+          }
+        ]}>
+          <View style={[
+            commonStyles.row, 
+            { 
+              marginBottom: 8,
+              flexDirection: isRTL ? 'row-reverse' : 'row'
+            }
+          ]}>
+            <Icon 
+              name="shield-checkmark-outline" 
+              size={24} 
+              color="white" 
+              style={{ 
+                marginRight: isRTL ? 0 : 12,
+                marginLeft: isRTL ? 12 : 0
+              }} 
+            />
+            <Text style={[
+              commonStyles.subtitle, 
+              { 
+                color: 'white', 
+                marginBottom: 0,
+                textAlign: isRTL ? 'right' : 'left'
+              }
+            ]}>
+              {t('compliance.notice')}
+            </Text>
+          </View>
+          <Text style={[
+            commonStyles.text, 
+            { 
+              color: 'white', 
+              opacity: 0.9,
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          ]}>
+            {t('compliance.message')}
+          </Text>
+        </View>
+      </ScrollView>
 
       <SimpleBottomSheet
         isVisible={isBottomSheetVisible}
         onClose={() => setIsBottomSheetVisible(false)}
-        title={selectedResource?.title || ''}
-        subtitle={selectedResource?.source || ''}
       >
         {selectedResource && (
-          <ScrollView style={{ maxHeight: 400 }}>
-            {selectedResource.content.map((line, index) => (
-              <Text
-                key={index}
-                style={[
-                  commonStyles.text,
-                  {
-                    marginBottom: line === '' ? 12 : 4,
-                    fontWeight: line.startsWith('•') ? 'normal' : 
-                               line.endsWith(':') || (!line.startsWith('•') && !line.startsWith(' ') && line !== '') ? '600' : 'normal',
-                    marginLeft: line.startsWith('•') ? 16 : 0,
+          <View style={{ padding: 20 }}>
+            <View style={[
+              commonStyles.row, 
+              { 
+                marginBottom: 20, 
+                alignItems: 'center',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }
+            ]}>
+              <Icon 
+                name={selectedResource.icon as any} 
+                size={28} 
+                color={getCategoryColor(selectedResource.category)} 
+                style={{ 
+                  marginRight: isRTL ? 0 : 12,
+                  marginLeft: isRTL ? 12 : 0
+                }}
+              />
+              <View style={{ flex: 1 }}>
+                <Text style={[
+                  commonStyles.title, 
+                  { 
+                    marginBottom: 4, 
+                    fontSize: 20,
+                    textAlign: isRTL ? 'right' : 'left'
                   }
-                ]}
-              >
-                {line}
-              </Text>
-            ))}
-          </ScrollView>
+                ]}>
+                  {selectedResource.title}
+                </Text>
+                <Text style={[
+                  commonStyles.textLight, 
+                  { 
+                    fontSize: 14,
+                    textAlign: isRTL ? 'right' : 'left'
+                  }
+                ]}>
+                  {selectedResource.source}
+                </Text>
+              </View>
+            </View>
+            
+            <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 400 }}>
+              {selectedResource.content.map((line, index) => (
+                <Text
+                  key={index}
+                  style={[
+                    commonStyles.text,
+                    {
+                      marginBottom: line === '' ? 12 : 4,
+                      fontWeight: line.startsWith('•') ? 'normal' : 
+                                 line.endsWith(':') || (!line.startsWith('•') && !line.startsWith(' ') && line !== '') ? '600' : 'normal',
+                      marginLeft: line.startsWith('•') ? (isRTL ? 0 : 16) : 0,
+                      marginRight: line.startsWith('•') ? (isRTL ? 16 : 0) : 0,
+                      textAlign: isRTL ? 'right' : 'left'
+                    }
+                  ]}
+                >
+                  {line}
+                </Text>
+              ))}
+            </ScrollView>
+          </View>
         )}
       </SimpleBottomSheet>
     </SafeAreaView>

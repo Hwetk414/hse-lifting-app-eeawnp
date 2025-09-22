@@ -4,6 +4,7 @@ import { Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-nativ
 import { commonStyles, colors } from '../styles/commonStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useLanguage } from '../contexts/LanguageContext';
 import Icon from '../components/Icon';
 import SimpleBottomSheet from '../components/BottomSheet';
 
@@ -18,6 +19,7 @@ interface ChemicalSafetyResource {
 
 export default function ChemicalSafetyScreen() {
   const router = useRouter();
+  const { t, isRTL } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedResource, setSelectedResource] = useState<ChemicalSafetyResource | null>(null);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
@@ -278,7 +280,7 @@ export default function ChemicalSafetyScreen() {
     }
   ];
 
-  const categories = ['All', 'OSHA', 'EPA', 'Saudi Aramco', 'NFPA', 'General'];
+  const categories = [t('all'), 'OSHA', 'EPA', 'Saudi Aramco', 'NFPA', t('all')];
 
   const filteredResources = resources.filter(resource => {
     const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -286,7 +288,7 @@ export default function ChemicalSafetyScreen() {
       resource.content.some(item => item.toLowerCase().includes(searchQuery.toLowerCase())) ||
       resource.source.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesCategory = selectedCategory === 'All' || resource.category === selectedCategory;
+    const matchesCategory = selectedCategory === t('all') || resource.category === selectedCategory;
     
     return matchesSearch && matchesCategory;
   });
@@ -308,43 +310,109 @@ export default function ChemicalSafetyScreen() {
   };
 
   return (
-    <SafeAreaView style={commonStyles.container}>
-      <View style={[commonStyles.row, { paddingHorizontal: 20, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.border }]}>
-        <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
-          <Icon name="arrow-back-outline" size={24} color={colors.text} />
+    <SafeAreaView style={[commonStyles.container, isRTL && { direction: 'rtl' }]}>
+      <View style={[
+        commonStyles.row, 
+        { 
+          paddingHorizontal: 20, 
+          paddingVertical: 16, 
+          borderBottomWidth: 1, 
+          borderBottomColor: colors.border,
+          flexDirection: isRTL ? 'row-reverse' : 'row'
+        }
+      ]}>
+        <TouchableOpacity 
+          onPress={() => router.back()} 
+          style={{ 
+            marginRight: isRTL ? 0 : 16,
+            marginLeft: isRTL ? 16 : 0
+          }}
+        >
+          <Icon 
+            name={isRTL ? "arrow-forward-outline" : "arrow-back-outline"} 
+            size={24} 
+            color={colors.text} 
+          />
         </TouchableOpacity>
-        <Text style={[commonStyles.subtitle, { marginBottom: 0, flex: 1 }]}>
-          Chemical Safety
+        <Text style={[
+          commonStyles.subtitle, 
+          { 
+            marginBottom: 0, 
+            flex: 1,
+            textAlign: isRTL ? 'right' : 'left'
+          }
+        ]}>
+          {t('chemical.safety')}
         </Text>
       </View>
 
       <ScrollView style={commonStyles.content} showsVerticalScrollIndicator={false}>
-        <Text style={[commonStyles.textLight, { marginBottom: 16, fontSize: 16 }]}>
+        <Text style={[
+          commonStyles.textLight, 
+          { 
+            marginBottom: 16, 
+            fontSize: 16,
+            textAlign: isRTL ? 'right' : 'left'
+          }
+        ]}>
           Chemical safety standards from OSHA, EPA, and industry organizations
         </Text>
 
         <View style={commonStyles.section}>
-          <Text style={commonStyles.label}>Search Chemical Safety Resources</Text>
+          <Text style={[
+            commonStyles.label,
+            { textAlign: isRTL ? 'right' : 'left' }
+          ]}>
+            {t('search.resources')}
+          </Text>
           <View style={{ position: 'relative' }}>
             <TextInput
-              style={[commonStyles.input, { paddingLeft: 40 }]}
+              style={[
+                commonStyles.input, 
+                { 
+                  paddingLeft: isRTL ? 12 : 40,
+                  paddingRight: isRTL ? 40 : 12,
+                  textAlign: isRTL ? 'right' : 'left'
+                }
+              ]}
               value={searchQuery}
               onChangeText={setSearchQuery}
-              placeholder="Search chemical safety standards and procedures"
+              placeholder={t('search.placeholder')}
               placeholderTextColor={colors.textLight}
             />
             <Icon 
               name="search-outline" 
               size={20} 
               color={colors.textLight} 
-              style={{ position: 'absolute', left: 12, top: 12 }}
+              style={{ 
+                position: 'absolute', 
+                left: isRTL ? undefined : 12, 
+                right: isRTL ? 12 : undefined,
+                top: 12 
+              }}
             />
           </View>
         </View>
 
         <View style={commonStyles.section}>
-          <Text style={[commonStyles.label, { marginBottom: 12 }]}>Filter by Organization</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
+          <Text style={[
+            commonStyles.label, 
+            { 
+              marginBottom: 12,
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          ]}>
+            {t('filter.by.organization')}
+          </Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            style={{ marginBottom: 16 }}
+            contentContainerStyle={{ 
+              paddingHorizontal: isRTL ? 0 : 0,
+              flexDirection: isRTL ? 'row-reverse' : 'row'
+            }}
+          >
             {categories.map((category) => (
               <TouchableOpacity
                 key={category}
@@ -353,7 +421,8 @@ export default function ChemicalSafetyScreen() {
                     paddingHorizontal: 16,
                     paddingVertical: 8,
                     borderRadius: 20,
-                    marginRight: 8,
+                    marginRight: isRTL ? 0 : 8,
+                    marginLeft: isRTL ? 8 : 0,
                     borderWidth: 1,
                   },
                   selectedCategory === category
@@ -378,55 +447,113 @@ export default function ChemicalSafetyScreen() {
         </View>
 
         <View style={commonStyles.section}>
-          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>
-            Chemical Safety Resources ({filteredResources.length})
+          <Text style={[
+            commonStyles.subtitle, 
+            { 
+              marginBottom: 16,
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          ]}>
+            {t('available.resources')} ({filteredResources.length})
           </Text>
 
           {filteredResources.map((resource, index) => (
             <TouchableOpacity
               key={index}
-              style={[commonStyles.card]}
+              style={[
+                commonStyles.card,
+                { 
+                  borderLeftWidth: isRTL ? 0 : 4, 
+                  borderRightWidth: isRTL ? 4 : 0,
+                  borderLeftColor: isRTL ? 'transparent' : getCategoryColor(resource.category),
+                  borderRightColor: isRTL ? getCategoryColor(resource.category) : 'transparent'
+                }
+              ]}
               onPress={() => openResource(resource)}
               activeOpacity={0.7}
             >
-              <View style={commonStyles.row}>
+              <View style={[
+                commonStyles.row,
+                { flexDirection: isRTL ? 'row-reverse' : 'row' }
+              ]}>
                 <View style={{ flex: 1 }}>
-                  <View style={[commonStyles.row, { marginBottom: 8, alignItems: 'center' }]}>
+                  <View style={[
+                    commonStyles.row, 
+                    { 
+                      marginBottom: 8, 
+                      alignItems: 'center',
+                      flexDirection: isRTL ? 'row-reverse' : 'row'
+                    }
+                  ]}>
                     <Icon 
                       name={resource.icon as any} 
                       size={24} 
                       color={getCategoryColor(resource.category)} 
-                      style={{ marginRight: 12 }}
+                      style={{ 
+                        marginRight: isRTL ? 0 : 12,
+                        marginLeft: isRTL ? 12 : 0
+                      }}
                     />
                     <View style={{ flex: 1 }}>
-                      <Text style={[commonStyles.subtitle, { marginBottom: 4, fontSize: 16 }]}>
+                      <Text style={[
+                        commonStyles.subtitle, 
+                        { 
+                          marginBottom: 4, 
+                          fontSize: 16,
+                          textAlign: isRTL ? 'right' : 'left'
+                        }
+                      ]}>
                         {resource.title}
                       </Text>
-                      <View style={[commonStyles.row, { alignItems: 'center' }]}>
+                      <View style={[
+                        commonStyles.row, 
+                        { 
+                          alignItems: 'center',
+                          flexDirection: isRTL ? 'row-reverse' : 'row'
+                        }
+                      ]}>
                         <View 
                           style={{
                             backgroundColor: getCategoryColor(resource.category),
                             paddingHorizontal: 8,
                             paddingVertical: 2,
                             borderRadius: 10,
-                            marginRight: 8
+                            marginRight: isRTL ? 0 : 8,
+                            marginLeft: isRTL ? 8 : 0
                           }}
                         >
                           <Text style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
                             {resource.category}
                           </Text>
                         </View>
-                        <Text style={[commonStyles.textLight, { fontSize: 12 }]}>
+                        <Text style={[
+                          commonStyles.textLight, 
+                          { 
+                            fontSize: 12,
+                            textAlign: isRTL ? 'right' : 'left'
+                          }
+                        ]}>
                           {resource.source}
                         </Text>
                       </View>
                     </View>
                   </View>
-                  <Text style={[commonStyles.textLight, { marginLeft: 36 }]}>
+                  <Text style={[
+                    commonStyles.textLight, 
+                    { 
+                      marginLeft: isRTL ? 0 : 36,
+                      marginRight: isRTL ? 36 : 0,
+                      textAlign: isRTL ? 'right' : 'left'
+                    }
+                  ]}>
                     {resource.description}
                   </Text>
                 </View>
-                <Icon name="chevron-forward-outline" size={20} color={colors.textLight} />
+                <Icon 
+                  name={isRTL ? "chevron-back-outline" : "chevron-forward-outline"} 
+                  size={20} 
+                  color={colors.textLight} 
+                />
               </View>
             </TouchableOpacity>
           ))}
@@ -435,21 +562,59 @@ export default function ChemicalSafetyScreen() {
         {filteredResources.length === 0 && (
           <View style={[commonStyles.card, commonStyles.center, { padding: 40 }]}>
             <Icon name="search-outline" size={48} color={colors.textLight} style={{ marginBottom: 16 }} />
-            <Text style={[commonStyles.text, { textAlign: 'center' }]}>
-              No chemical safety resources found matching your search criteria
+            <Text style={[
+              commonStyles.text, 
+              { textAlign: 'center' }
+            ]}>
+              {t('no.results')}
             </Text>
           </View>
         )}
 
-        <View style={[commonStyles.card, { backgroundColor: '#9C27B0', marginTop: 20, marginBottom: 20 }]}>
-          <View style={[commonStyles.row, { marginBottom: 8 }]}>
-            <Icon name="flask-outline" size={24} color="white" style={{ marginRight: 12 }} />
-            <Text style={[commonStyles.subtitle, { color: 'white', marginBottom: 0 }]}>
-              Chemical Safety Notice
+        <View style={[
+          commonStyles.card, 
+          { 
+            backgroundColor: '#9C27B0', 
+            marginTop: 20, 
+            marginBottom: 20 
+          }
+        ]}>
+          <View style={[
+            commonStyles.row, 
+            { 
+              marginBottom: 8,
+              flexDirection: isRTL ? 'row-reverse' : 'row'
+            }
+          ]}>
+            <Icon 
+              name="flask-outline" 
+              size={24} 
+              color="white" 
+              style={{ 
+                marginRight: isRTL ? 0 : 12,
+                marginLeft: isRTL ? 12 : 0
+              }} 
+            />
+            <Text style={[
+              commonStyles.subtitle, 
+              { 
+                color: 'white', 
+                marginBottom: 0,
+                textAlign: isRTL ? 'right' : 'left'
+              }
+            ]}>
+              {t('compliance.notice')}
             </Text>
           </View>
-          <Text style={[commonStyles.text, { color: 'white', opacity: 0.9 }]}>
-            Always read Safety Data Sheets before handling chemicals. Use appropriate PPE and follow established procedures. Report chemical incidents immediately and seek medical attention if exposed.
+          <Text style={[
+            commonStyles.text, 
+            { 
+              color: 'white', 
+              opacity: 0.9,
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          ]}>
+            {t('compliance.message')}
           </Text>
         </View>
       </ScrollView>
@@ -460,32 +625,62 @@ export default function ChemicalSafetyScreen() {
       >
         {selectedResource && (
           <View style={{ padding: 20 }}>
-            <View style={[commonStyles.row, { marginBottom: 20, alignItems: 'center' }]}>
+            <View style={[
+              commonStyles.row, 
+              { 
+                marginBottom: 20, 
+                alignItems: 'center',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }
+            ]}>
               <Icon 
                 name={selectedResource.icon as any} 
                 size={28} 
                 color={getCategoryColor(selectedResource.category)} 
-                style={{ marginRight: 12 }}
+                style={{ 
+                  marginRight: isRTL ? 0 : 12,
+                  marginLeft: isRTL ? 12 : 0
+                }}
               />
               <View style={{ flex: 1 }}>
-                <Text style={[commonStyles.title, { marginBottom: 4, fontSize: 20 }]}>
+                <Text style={[
+                  commonStyles.title, 
+                  { 
+                    marginBottom: 4, 
+                    fontSize: 20,
+                    textAlign: isRTL ? 'right' : 'left'
+                  }
+                ]}>
                   {selectedResource.title}
                 </Text>
-                <View style={[commonStyles.row, { alignItems: 'center' }]}>
+                <View style={[
+                  commonStyles.row, 
+                  { 
+                    alignItems: 'center',
+                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                  }
+                ]}>
                   <View 
                     style={{
                       backgroundColor: getCategoryColor(selectedResource.category),
                       paddingHorizontal: 10,
                       paddingVertical: 4,
                       borderRadius: 12,
-                      marginRight: 10
+                      marginRight: isRTL ? 0 : 10,
+                      marginLeft: isRTL ? 10 : 0
                     }}
                   >
                     <Text style={{ color: 'white', fontSize: 12, fontWeight: '600' }}>
                       {selectedResource.category}
                     </Text>
                   </View>
-                  <Text style={[commonStyles.textLight, { fontSize: 14 }]}>
+                  <Text style={[
+                    commonStyles.textLight, 
+                    { 
+                      fontSize: 14,
+                      textAlign: isRTL ? 'right' : 'left'
+                    }
+                  ]}>
                     {selectedResource.source}
                   </Text>
                 </View>
@@ -494,11 +689,33 @@ export default function ChemicalSafetyScreen() {
             
             <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 400 }}>
               {selectedResource.content.map((item, index) => (
-                <View key={index} style={[commonStyles.row, { marginBottom: 12, alignItems: 'flex-start' }]}>
-                  <Text style={[commonStyles.text, { color: getCategoryColor(selectedResource.category), marginRight: 8, fontWeight: '600' }]}>
+                <View key={index} style={[
+                  commonStyles.row, 
+                  { 
+                    marginBottom: 12, 
+                    alignItems: 'flex-start',
+                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                  }
+                ]}>
+                  <Text style={[
+                    commonStyles.text, 
+                    { 
+                      color: getCategoryColor(selectedResource.category), 
+                      marginRight: isRTL ? 0 : 8,
+                      marginLeft: isRTL ? 8 : 0,
+                      fontWeight: '600' 
+                    }
+                  ]}>
                     •
                   </Text>
-                  <Text style={[commonStyles.text, { flex: 1, lineHeight: 20 }]}>
+                  <Text style={[
+                    commonStyles.text, 
+                    { 
+                      flex: 1, 
+                      lineHeight: 20,
+                      textAlign: isRTL ? 'right' : 'left'
+                    }
+                  ]}>
                     {item}
                   </Text>
                 </View>
