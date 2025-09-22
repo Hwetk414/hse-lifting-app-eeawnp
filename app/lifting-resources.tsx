@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { commonStyles, colors } from '../styles/commonStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -16,6 +16,7 @@ interface ResourceItem {
 
 export default function LiftingResourcesScreen() {
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedResource, setSelectedResource] = useState<ResourceItem | null>(null);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
@@ -87,8 +88,48 @@ export default function LiftingResourcesScreen() {
         'Verify ground bearing pressure',
         'Document all calculations'
       ]
+    },
+    {
+      title: 'Crane Signals',
+      description: 'Standard hand signals for crane operations',
+      icon: 'hand-left-outline',
+      content: [
+        'Hoist: Point up with index finger, move hand in small horizontal circle',
+        'Lower: Point down with index finger, move hand in small horizontal circle',
+        'Swing: Point with index finger in direction of swing',
+        'Stop: Extend arm, palm down, move arm back and forth horizontally',
+        'Emergency Stop: Both arms extended, palms down, move arms back and forth',
+        'Move Slowly: Use one hand to give any motion signal, place other hand motionless in front of hand giving signal',
+        'Raise Boom: Arm extended, fingers closed, thumb pointing up',
+        'Lower Boom: Arm extended, fingers closed, thumb pointing down',
+        'Extend Boom: Both fists in front of body with thumbs pointing outward',
+        'Retract Boom: Both fists in front of body with thumbs pointing toward each other'
+      ]
+    },
+    {
+      title: 'Weather Limitations',
+      description: 'Weather conditions that affect lifting operations',
+      icon: 'cloud-outline',
+      content: [
+        'Wind speed limits for different crane types',
+        'Visibility requirements (minimum 500m)',
+        'Temperature effects on equipment',
+        'Rain and moisture considerations',
+        'Lightning and electrical storm protocols',
+        'Ice and snow conditions',
+        'Fog and reduced visibility procedures',
+        'High temperature effects on hydraulics',
+        'Seasonal maintenance requirements',
+        'Weather monitoring procedures'
+      ]
     }
   ];
+
+  const filteredResources = resources.filter(resource =>
+    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    resource.content.some(item => item.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   const openResource = (resource: ResourceItem) => {
     setSelectedResource(resource);
@@ -108,12 +149,35 @@ export default function LiftingResourcesScreen() {
       </View>
 
       <ScrollView style={commonStyles.content} showsVerticalScrollIndicator={false}>
-        <Text style={[commonStyles.textLight, { marginBottom: 24, fontSize: 16 }]}>
+        <Text style={[commonStyles.textLight, { marginBottom: 16, fontSize: 16 }]}>
           Essential resources for safe lifting operations
         </Text>
 
         <View style={commonStyles.section}>
-          {resources.map((resource, index) => (
+          <Text style={commonStyles.label}>Search Resources</Text>
+          <View style={{ position: 'relative' }}>
+            <TextInput
+              style={[commonStyles.input, { paddingLeft: 40 }]}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholder="Search resources, procedures, or content"
+              placeholderTextColor={colors.textLight}
+            />
+            <Icon 
+              name="search-outline" 
+              size={20} 
+              color={colors.textLight} 
+              style={{ position: 'absolute', left: 12, top: 12 }}
+            />
+          </View>
+        </View>
+
+        <View style={commonStyles.section}>
+          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>
+            Available Resources ({filteredResources.length})
+          </Text>
+
+          {filteredResources.map((resource, index) => (
             <TouchableOpacity
               key={index}
               style={[commonStyles.card]}
@@ -142,6 +206,15 @@ export default function LiftingResourcesScreen() {
             </TouchableOpacity>
           ))}
         </View>
+
+        {filteredResources.length === 0 && (
+          <View style={[commonStyles.card, commonStyles.center, { padding: 40 }]}>
+            <Icon name="search-outline" size={48} color={colors.textLight} style={{ marginBottom: 16 }} />
+            <Text style={[commonStyles.text, { textAlign: 'center' }]}>
+              No resources found matching your search criteria
+            </Text>
+          </View>
+        )}
 
         <View style={[commonStyles.card, { backgroundColor: colors.warning, marginTop: 20 }]}>
           <View style={[commonStyles.row, { marginBottom: 8 }]}>
