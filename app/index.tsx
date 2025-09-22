@@ -118,6 +118,13 @@ export default function HomeScreen() {
       route: '/environmental-compliance',
       color: '#8BC34A',
     },
+    {
+      title: 'Hot Work Operations',
+      description: 'Hot work permits, fire watch, and welding safety standards',
+      icon: 'flame-outline',
+      route: '/hot-work',
+      color: '#FF5722',
+    },
   ];
 
   return (
