@@ -77,18 +77,25 @@ export default function HomeScreen() {
       color: '#673AB7',
     },
     {
+      title: 'Scaffolding Standards',
+      description: 'Scaffold erection, inspection, and safety requirements',
+      icon: 'construct-outline',
+      route: '/scaffolding-standards',
+      color: '#8D6E63',
+    },
+    {
       title: 'Excavations',
       description: 'Excavation safety, soil classification, and protective systems',
       icon: 'construct-outline',
       route: '/excavations',
-      color: '#8D6E63',
+      color: '#795548',
     },
     {
       title: 'Confined Space',
       description: 'Confined space entry procedures and safety requirements',
       icon: 'cube-outline',
       route: '/confined-space',
-      color: '#795548',
+      color: '#607D8B',
     },
     {
       title: 'Personal Protective Equipment',
