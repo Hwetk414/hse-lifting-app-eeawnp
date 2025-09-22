@@ -70,6 +70,20 @@ export default function HomeScreen() {
       color: '#2196F3',
     },
     {
+      title: 'Lifeline Safety',
+      description: 'Lifeline systems, rope access, and anchorage requirements',
+      icon: 'git-branch-outline',
+      route: '/lifeline-safety',
+      color: '#673AB7',
+    },
+    {
+      title: 'Excavations',
+      description: 'Excavation safety, soil classification, and protective systems',
+      icon: 'construct-outline',
+      route: '/excavations',
+      color: '#8D6E63',
+    },
+    {
       title: 'Confined Space',
       description: 'Confined space entry procedures and safety requirements',
       icon: 'cube-outline',
