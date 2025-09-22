@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { setupErrorLogging } from '../utils/errorLogger';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LanguageProvider } from '../contexts/LanguageContext';
+import SplashScreen from '../components/SplashScreen';
 
 const STORAGE_KEY = 'emulated_device';
 
@@ -13,8 +14,10 @@ export default function RootLayout() {
   const actualInsets = useSafeAreaInsets();
   const { emulate } = useGlobalSearchParams<{ emulate?: string }>();
   const [storedEmulate, setStoredEmulate] = useState<string | null>(null);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
+    console.log('RootLayout: App starting, showing splash screen');
     // Set up global error logging
     setupErrorLogging();
 
@@ -33,6 +36,11 @@ export default function RootLayout() {
     }
   }, [emulate]);
 
+  const handleSplashFinish = () => {
+    console.log('RootLayout: Splash screen finished, showing main app');
+    setShowSplash(false);
+  };
+
   let insetsToUse = actualInsets;
 
   if (Platform.OS === 'web') {
@@ -44,6 +52,18 @@ export default function RootLayout() {
     // Use stored emulate value if available, otherwise use the current emulate parameter
     const deviceToEmulate = storedEmulate || emulate;
     insetsToUse = deviceToEmulate ? simulatedInsets[deviceToEmulate as keyof typeof simulatedInsets] || actualInsets : actualInsets;
+  }
+
+  if (showSplash) {
+    return (
+      <SafeAreaProvider>
+        <LanguageProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <SplashScreen onFinish={handleSplashFinish} />
+          </GestureHandlerRootView>
+        </LanguageProvider>
+      </SafeAreaProvider>
+    );
   }
 
   return (
