@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import { commonStyles, colors } from '../styles/commonStyles';
+import { commonStyles, colors, buttonStyles } from '../styles/commonStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import Icon from '../components/Icon';
@@ -134,6 +134,11 @@ export default function EquipmentDatabaseScreen() {
     console.log('Opening equipment details:', item.name);
   };
 
+  const navigateToAddEquipment = () => {
+    router.push('/add-equipment');
+    console.log('Navigating to add equipment screen');
+  };
+
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'mobile':
@@ -173,6 +178,9 @@ export default function EquipmentDatabaseScreen() {
         <Text style={[commonStyles.subtitle, { marginBottom: 0, flex: 1 }]}>
           Equipment Database
         </Text>
+        <TouchableOpacity onPress={navigateToAddEquipment}>
+          <Icon name="add-outline" size={24} color={colors.primary} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={commonStyles.content} showsVerticalScrollIndicator={false}>
@@ -196,9 +204,21 @@ export default function EquipmentDatabaseScreen() {
         </View>
 
         <View style={commonStyles.section}>
-          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>
-            Available Equipment ({filteredEquipment.length})
-          </Text>
+          <View style={[commonStyles.row, { alignItems: 'center', marginBottom: 16 }]}>
+            <Text style={[commonStyles.subtitle, { marginBottom: 0, flex: 1 }]}>
+              Available Equipment ({filteredEquipment.length})
+            </Text>
+            <TouchableOpacity
+              style={[buttonStyles.primary, { paddingHorizontal: 16, paddingVertical: 8 }]}
+              onPress={navigateToAddEquipment}
+              activeOpacity={0.7}
+            >
+              <View style={[commonStyles.row, { alignItems: 'center' }]}>
+                <Icon name="add-outline" size={16} color={colors.background} style={{ marginRight: 4 }} />
+                <Text style={[buttonStyles.primaryText, { fontSize: 14 }]}>Add Equipment</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
 
           {filteredEquipment.map((item) => (
             <TouchableOpacity
@@ -256,9 +276,19 @@ export default function EquipmentDatabaseScreen() {
         {filteredEquipment.length === 0 && (
           <View style={[commonStyles.card, commonStyles.center, { padding: 40 }]}>
             <Icon name="search-outline" size={48} color={colors.textLight} style={{ marginBottom: 16 }} />
-            <Text style={[commonStyles.text, { textAlign: 'center' }]}>
+            <Text style={[commonStyles.text, { textAlign: 'center', marginBottom: 16 }]}>
               No equipment found matching your search criteria
             </Text>
+            <TouchableOpacity
+              style={[buttonStyles.primary, { paddingHorizontal: 20, paddingVertical: 10 }]}
+              onPress={navigateToAddEquipment}
+              activeOpacity={0.7}
+            >
+              <View style={[commonStyles.row, { alignItems: 'center' }]}>
+                <Icon name="add-outline" size={16} color={colors.background} style={{ marginRight: 6 }} />
+                <Text style={[buttonStyles.primaryText, { fontSize: 14 }]}>Add New Equipment</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         )}
       </ScrollView>
