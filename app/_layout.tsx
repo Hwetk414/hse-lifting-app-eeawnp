@@ -1,9 +1,11 @@
+
 import { Stack, useGlobalSearchParams } from 'expo-router';
 import { SafeAreaProvider, useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 import { useEffect, useState } from 'react';
 import { setupErrorLogging } from '../utils/errorLogger';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LanguageProvider } from '../contexts/LanguageContext';
 
 const STORAGE_KEY = 'emulated_device';
 
@@ -46,6 +48,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      <LanguageProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack
             screenOptions={{
@@ -54,6 +57,7 @@ export default function RootLayout() {
             }}
           />
         </GestureHandlerRootView>
+      </LanguageProvider>
     </SafeAreaProvider>
   );
 }
